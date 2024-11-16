@@ -1,29 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Certificate</title>
-</head>
-<body>
-    <h1>Upload Certificate PDF</h1>
-    <form id="uploadForm">
-        <input type="file" name="pdf" accept="application/pdf" required>
-        <button type="submit">Upload</button>
-    </form>
+<form id="uploadForm">
+    <input type="file" name="pdf" id="fileInput" accept="application/pdf" required>
+    <button type="submit">Upload</button>
+</form>
+<p id="error" style="color: red;"></p>
 
-    <script>
-        document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+<script>
+    const MAX_FILE_SIZE_MB = 10; // Set max size to 10 MB
+    const fileInput = document.getElementById("fileInput");
+    const errorElement = document.getElementById("error");
+
+    document.getElementById("uploadForm").addEventListener("submit", (e) => {
+        const file = fileInput.files[0];
+        if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
             e.preventDefault();
-            const formData = new FormData(e.target);
-
-            const response = await fetch("/upload", {
-                method: "POST",
-                body: formData,
-            });
-
-            alert(await response.text());
-        });
-    </script>
-</body>
-</html>
+            errorElement.textContent = `File size exceeds ${MAX_FILE_SIZE_MB} MB limit.`;
+        }
+    });
+</script>
