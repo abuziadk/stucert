@@ -4,25 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>رفع الشهادات</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h1>رفع ملفات الشهادات</h1>
-    <input type="file" id="file" multiple>
-    <button onclick="uploadFiles()">رفع الملفات</button>
-    <div id="uploadStatus"></div>
+    <div class="container">
+        <h1>رفع الشهادات</h1>
+        <input type="file" id="fileInput" accept=".pdf">
+        <button onclick="uploadFile()">رفع الشهادة</button>
+    </div>
+
     <script>
-        async function uploadFiles() {
-            const files = document.getElementById('file').files;
-            const formData = new FormData();
-            for (const file of files) {
-                formData.append('files', file);
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("يرجى اختيار ملف");
+                return;
             }
-            const response = await fetch(`/upload`, {
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch('/upload', {
                 method: 'POST',
-                body: formData
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("تم رفع الشهادة بنجاح");
+                } else {
+                    alert("فشل في رفع الشهادة");
+                }
+            })
+            .catch(error => {
+                alert("حدث خطأ أثناء رفع الملف");
             });
-            const result = await response.json();
-            document.getElementById('uploadStatus').textContent = result.message;
         }
     </script>
 </body>
