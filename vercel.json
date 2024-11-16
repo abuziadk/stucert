@@ -3,7 +3,7 @@
   "functions": {
     "api/*": {
       "maxDuration": 10,
-      "maxRequestBodySize": 10
+   
     }
   }
 }
