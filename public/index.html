@@ -3,115 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رفع شهادات الطلاب</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            direction: rtl;
-            text-align: center;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            color: #333;
-            margin-top: 20px;
-        }
-        form {
-            margin-top: 20px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: inline-block;
-        }
-        input[type="file"] {
-            margin: 10px 0;
-            padding: 10px;
-            font-size: 16px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #error {
-            color: red;
-            margin-top: 10px;
-        }
-        #success {
-            color: green;
-            margin-top: 10px;
-        }
-    </style>
+    <title>رفع الشهادات</title>
 </head>
 <body>
-    <h1>رفع شهادات الطلاب</h1>
-    <form id="uploadForm">
-        <label for="fileInput">اختر ملف PDF لرفعه:</label>
-        <input type="file" id="fileInput" name="pdf" accept="application/pdf" required>
-        <button type="submit">رفع الملف</button>
-    </form>
-    <p id="error"></p>
-    <p id="success"></p>
-
+    <h1>رفع ملفات الشهادات</h1>
+    <input type="file" id="file" multiple>
+    <button onclick="uploadFiles()">رفع الملفات</button>
+    <div id="uploadStatus"></div>
     <script>
-        // الحد الأقصى لحجم الملف بالميجابايت
-        const MAX_FILE_SIZE_MB = 10;
-
-        // عناصر HTML
-        const fileInput = document.getElementById("fileInput");
-        const errorElement = document.getElementById("error");
-        const successElement = document.getElementById("success");
-
-        // الاستماع إلى حدث إرسال النموذج
-        document.getElementById("uploadForm").addEventListener("submit", async (e) => {
-            e.preventDefault(); // منع التحديث الافتراضي للصفحة
-            errorElement.textContent = "";
-            successElement.textContent = "";
-
-            const file = fileInput.files[0]; // الحصول على الملف المُختار
-            if (!file) {
-                errorElement.textContent = "يجب اختيار ملف لرفعه.";
-                return;
-            }
-
-            // التحقق من حجم الملف
-            if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-                errorElement.textContent = `حجم الملف يتجاوز الحد المسموح (${MAX_FILE_SIZE_MB} ميجابايت).`;
-                return;
-            }
-
-            // رفع الملف باستخدام Fetch API
+        async function uploadFiles() {
+            const files = document.getElementById('file').files;
             const formData = new FormData();
-            formData.append("pdf", file);
-
-            try {
-                const response = await fetch("/upload", {
-                    method: "POST",
-                    body: formData,
-                });
-
-                if (response.ok) {
-                    successElement.textContent = "تم رفع الملف بنجاح.";
-                } else {
-                    errorElement.textContent = "حدث خطأ أثناء رفع الملف.";
-                }
-            } catch (err) {
-<<<<<<< HEAD
-                errorElement.textCont
-=======
-                errorElement.textContent = "فشل الاتصال بالخادم. حاول مرة أخرى.";
+            for (const file of files) {
+                formData.append('files', file);
             }
-        });
+            const response = await fetch(`/upload`, {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById('uploadStatus').textContent = result.message;
+        }
     </script>
 </body>
 </html>
->>>>>>> 915f504df07f8070627104472c51d712d639b3c2
