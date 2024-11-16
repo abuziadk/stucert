@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Certificate</title>
+</head>
+<body>
+    <h1>Search Certificate</h1>
+    <form id="searchForm">
+        <input type="text" id="studentId" placeholder="Enter Student ID" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+        document.getElementById("searchForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const studentId = document.getElementById("studentId").value;
+
+            const response = await fetch(`/search/${studentId}`);
+            const result = await response.json();
+
+            if (result.success) {
+                document.getElementById("result").textContent = `Certificate found: ${result.file}`;
+            } else {
+                document.getElementById("result").textContent = result.message;
+            }
+        });
+    </script>
+</body>
+</html>
