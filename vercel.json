@@ -6,3 +6,11 @@
     { "src": "/upload", "dest": "/api/upload.js" }
   ]
 }
+{
+  "version": 2,
+  "functions": {
+    "api/upload.js": {
+      "maxRequestBodySize": 10
+    }
+  }
+}
