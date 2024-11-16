@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "functions": {
+    "api/*": {
+      "maxDuration": 10,
+      "maxRequestBodySize": 10
+    }
+  }
+}
