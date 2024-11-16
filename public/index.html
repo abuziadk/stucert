@@ -1,19 +1,70 @@
-<form id="uploadForm">
-    <input type="file" name="pdf" id="fileInput" accept="application/pdf" required>
-    <button type="submit">Upload</button>
-</form>
-<p id="error" style="color: red;"></p>
-
-<script>
-    const MAX_FILE_SIZE_MB = 10; // Set max size to 10 MB
-    const fileInput = document.getElementById("fileInput");
-    const errorElement = document.getElementById("error");
-
-    document.getElementById("uploadForm").addEventListener("submit", (e) => {
-        const file = fileInput.files[0];
-        if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-            e.preventDefault();
-            errorElement.textContent = `File size exceeds ${MAX_FILE_SIZE_MB} MB limit.`;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
         }
-    });
-</script>
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        p {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Your PDF Certificate</h1>
+        <form id="uploadForm">
+            <input type="file" name="pdf" id="fileInput" accept="application/pdf" required>
+            <br>
+            <button type="submit">Upload</button>
+        </form>
+        <p id="error"></p>
+    </div>
+
+    <script>
+        const MAX_FILE_SIZE_MB = 10; // Set max size to 10 MB
+        const fileInput = document.getElementById("fileInput");
+        const errorElement = document.getElementById("error");
+
+        document.getElementById("uploadForm").addEventListener("submit", (e) => {
+            const file = fileInput.files[0];
+            if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+                e.preventDefault();
+                errorElement.textContent = `File size exceeds ${MAX_FILE_SIZE_MB} MB limit.`;
+            } else {
+                errorElement.textContent = ''; // Clear any previous error message
+            }
+        });
+    </script>
+</body>
+</html>
