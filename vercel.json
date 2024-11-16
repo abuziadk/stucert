@@ -1,0 +1,8 @@
+{
+  "builds": [
+    { "src": "api/upload.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/upload", "dest": "/api/upload.js" }
+  ]
+}
