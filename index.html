@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>توليد QR Code</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <h2>امسح الـ QR Code للانضمام إلى البث</h2>
+    <div id="qrcode"></div>
+
+    <script>
+        const streamUrl = "http://192.168.8.34:3000/broadcast.html"; // استبدل بالرابط الفعلي
+        new QRCode(document.getElementById("qrcode"), streamUrl);
+    </script>
+</body>
+</html>
