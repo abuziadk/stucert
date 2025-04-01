@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بث الكاميرا</title>
+</head>
+<body>
+    <h2>يتم الآن بث الفيديو...</h2>
+    <video id="video" autoplay playsinline></video>
+
+    <script>
+        const ws = new WebSocket("ws://localhost:3000"); // استبدل بـ IP الخادم إذا كان بعيدًا
+        const peer = new RTCPeerConnection();
+        const videoElement = document.getElementById('video');
+
+        ws.onopen = () => ws.send(JSON.stringify({ type: "register", role: "sender" }));
+
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+                stream.getTracks().forEach(track => peer.addTrack(track, stream));
+
+                const offer = await peer.createOffer();
+                await peer.setLocalDescription(offer);
+                ws.send(JSON.stringify({ type: "offer", offer }));
+            } catch (error) {
+                alert("حدث خطأ أثناء تشغيل الكاميرا: " + error.message);
+            }
+        }
+
+        ws.onmessage = async (message) => {
+            const data = JSON.parse(message.data);
+            if (data.type === "answer") {
+                await peer.setRemoteDescription(new RTCSessionDescription(data.answer));
+            } else if (data.type === "candidate") {
+                peer.addIceCandidate(new RTCIceCandidate(data.candidate));
+            }
+        };
+
+        peer.onicecandidate = (event) => {
+            if (event.candidate) {
+                ws.send(JSON.stringify({ type: "candidate", candidate: event.candidate, target: "viewer" }));
+            }
+        };
+
+        startCamera();
+    </script>
+</body>
+</html>
