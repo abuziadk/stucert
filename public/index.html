@@ -3,84 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رفع الشهادات</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            padding: 50px;
-        }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px;
-            width: 100%;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <title>توليد QR Code</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>رفع الشهادات</h1>
-        <input type="file" id="fileInput" accept=".pdf">
-        <button onclick="uploadFile()">رفع الشهادة</button>
-    </div>
+    <h2>امسح الـ QR Code للانضمام إلى البث</h2>
+    <div id="qrcode"></div>
 
     <script>
-        function uploadFile() {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-
-            if (!file) {
-                alert("يرجى اختيار ملف");
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append("file", file);
-
-            fetch('/upload', {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("تم رفع الشهادة بنجاح");
-                } else {
-                    alert("فشل في رفع الشهادة");
-                }
-            })
-            .catch(error => {
-                alert("حدث خطأ أثناء رفع الملف");
-            });
-        }
+        const streamUrl = "https://yourserver.com/broadcast.html"; // استبدل بالرابط الفعلي
+        new QRCode(document.getElementById("qrcode"), streamUrl);
     </script>
 </body>
 </html>
